@@ -1,0 +1,152 @@
+%%\input{./StylesheetDraft.tex}
+\documentclass[12pt,a4paper,oneside]{book}
+\usepackage[polutonikogreek,british]{babel} % for ancient Greek
+%\usepackage[utf8]{inputenc}
+\usepackage[notes, backend=biber,autocite=footnote,doi=false,isbn=false,url=false,eprint=false,clearlang=true]{biblatex-chicago}
+%\usepackage{fontspec}
+\usepackage{setspace}
+\usepackage[multiple,flushmargin]{footmisc}
+\usepackage{graphicx}
+\graphicspath {{Imgs/}}  % TODO set your images directory
+\usepackage{makeidx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{csquotes}
+\usepackage{metalogo}
+\usepackage{microtype}
+\usepackage{caption}
+\usepackage[colorinlistoftodos,textsize=tiny]{todonotes}
+%\usepackage{lineno}
+%\font\greekFont="Everson Mono Oblique" at 11pt
+\font\greekFootnoteFont="Minion Pro" at 9pt
+\font\greekFont="Minion Pro" at 10pt
+%\usepackage{palatino}
+\usepackage[colorinlistoftodos,textsize=tiny]{todonotes}
+
+% This patch should permit \autocite to function properly in footnotes.
+\makeatletter
+\patchcmd\@footnotetext
+  {#1}
+  {\toggletrue{blx@footnote}#1}
+  {\togglefalse{blx@tempa}}
+  {}
+\makeatother
+
+%\renewcommand{\footnotesize}{\small} % 10pt footnotes in 11pt doc instead of 9pt
+\usepackage{etoolbox}
+
+%Widow and Orphen control
+\widowpenalty10000
+\clubpenalty10000
+
+%%%%% begin DOI in bibliography only
+\renewbibmacro*{doi+eprint+url}{%
+  \iftoggle{bbx:doi}
+    {\ifboolexpr{test {\iffootnote}}{}{\printfield{doi}}}
+    {}%
+  \newunit\newblock
+  \iftoggle{bbx:eprint}
+    {\usebibmacro{eprint}}
+    {}%
+  \newunit\newblock
+  \ifboolexpr{test {\iftoggle{bbx:url}}
+               or test {\ifentrytype{online}}}
+    {\usebibmacro{url+urldate}}
+    {}}
+%%%%% end DOI in bibliography only
+
+%%%%% short citations for \autocite
+
+\makeatletter
+\AtEveryCitekey{%
+  \ifboolexpr{ test {\iffieldequalstr{entrysubtype}{classical}}
+               and not test {\iffieldundef{shorttitle}} }
+    {\ifciteseen
+       {\blx@ibidreset\clearname{labelname}}
+       {\savefield{title}{\cbxtitle}\restorefield{labeltitle}{\cbxtitle}}}
+    {}}
+\makeatother
+
+%%%%%
+
+%%%%% begin Custom footnote definition
+% \makeatletter%%
+% \patchcmd{\@makefntext}{%
+% \ifFN@hangfoot
+% \bgroup}%
+% {%
+% \ifFN@hangfoot
+% \bgroup\def\@makefnmark{\rlap{\normalfont\@thefnmark}}}{}{}%
+% % %%%
+% \patchcmd{\@makefntext}{%
+% \ifdim\footnotemargin>\z@
+% \hb@xt@ \footnotemargin{\hss\@makefnmark}}%
+% {%
+% \ifdim\footnotemargin>\z@
+% \hb@xt@ \footnotemargin{\@makefnmark\hss}}{}{}%
+% \makeatother
+%
+\setlength{\footnotemargin}{-0.75em} % Between marker and text
+% \setlength{\skip\footins}{1\baselineskip} % Between main text and note rule
+% \setlength{\footnotesep}{\skip\footins} % Between footnotes [= previous]
+%
+% \renewcommand{\hangfootparskip}{0pt}
+%\renewcommand{\hangfootparindent}{-1.25em}
+%%%% end Custom footnote definition
+
+% Font specifications
+\usepackage{fontspec}
+%\setmainfont{Prestige Elite Std}
+\setmainfont{Minion Pro}
+
+% 72 pt top and bottom margins for 12pt font
+\addtolength{\topmargin}{-0.875in}
+\addtolength{\textheight}{1.75in}
+
+\pagestyle{plain}
+
+%\usepackage{showframe} %%%% For layout debugging
+
+\newcommand{\greek}[1]{{\selectlanguage{polutonikogreek}#1}}
+
+% Remove the language field
+\AtEveryBibitem{\clearlist{language}}
+\bibliography{./thss-bb.bib}
+
+%\setdefaultlanguage[variant=british]{english}
+
+\begin{document}
+% FRONT MATTER
+\input{./ttlpg-kcl.tex}
+\input{./dclrtn.tex}
+\input{./acknwldgmnts.tex}
+\input{./smmry.tex}
+
+% Set font size for rest of document
+\normalsize
+\mdseries
+
+\tableofcontents
+
+\listoffigures
+
+\newpage
+
+% MAIN MATTER
+
+% Linespacing
+\doublespacing
+\frenchspacing
+
+\setcounter{page}{1}
+\pagenumbering{arabic}
+
+\chapter{Introduction}
+\addtocontents{toc}{\protect\enlargethispage{\baselineskip}}
+
+% END MATTER
+\newpage
+\printbibliography
+\newpage
+\printindex
+\input{./clphn.tex}
+\end{document}
