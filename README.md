@@ -5,3 +5,5 @@ This repository contains a LaTeX template intended to conform to the National Un
 Beyond specific NUS requirements, the stylistic conventions adopted by this template represent the author's preference. The repository itself may be used as a template from which to structure one's own dissertation project.
 
 This template is designed to be used with the XeLaTeX package.
+
+The template is now also available on [Overleaf](https://www.overleaf.com/latex/templates/nus-dissertation-latex-template/svxnmtdfxymk).  Please report any bugs or improvements here and the Overleaf template will be updated accordingly.
